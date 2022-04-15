@@ -3,3 +3,5 @@
 <h2>Projeto Integrador 5 - Centro Universitário SENAC</h2>
 
 Projeto com microcontrolador ESP32 para criação de semáforos inteligentes usando IoT (IBM Watson)
+
+https://9e8of7.internetofthings.ibmcloud.com/dashboard/devices/browse
