@@ -8,18 +8,18 @@
 /*Pins usage & IBM Watson IoT Platform info*/
 #define DHTPIN 4 
 #define DHTTYPE DHT11
-#define ORG "" 
+#define ORG "1xs2qq" 
 #define DEVICE_TYPE "ESP32-V1.0" 
 #define DEVICE_ID "Semaforo-Inteligente-V1.0" 
-#define TOKEN ""
+#define TOKEN "n+bOVh?*95HUfc?&7!"
 #define ANALOG_PIN_0 36
 
 int sensorValue = 0;
 int analog_value = 0;
 
 /*Wifi Info*/
-const char* ssid = "";
-const char* password = "";
+const char* ssid = "RM_2G";
+const char* password = "RM27111803";
 
 /*IBM Watson IoT Platform connection*/
 char server[] = ORG ".messaging.internetofthings.ibmcloud.com";
