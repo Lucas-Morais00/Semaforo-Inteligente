@@ -157,3 +157,7 @@ void loop() {
             Serial.println("Publish failed");
     }
 }
+
+/*Arrumar leitura estranha do sensor
+Mudar visualização estadoSemaforo
+Decidir valores de distancia e contagem de carros*/
