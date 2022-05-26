@@ -5,44 +5,46 @@ Isabela Miranda
 Lucas Morais
 Gustavo dos Santos */
 
-/*ESP32 Wifi libs*/
+/*ESP32 Wifi bibliotecas*/
 #include <WiFi.h>
 #include <WiFiClient.h>
 #include <PubSubClient.h> 
 
-/*Pins usage HCSR04 ESP32*/
+/*Pinos usados HCSR04 e ESP32*/
 const int trigPin = 5;
 const int echoPin = 18;
 
-/*Pins usage and variables LEDs & ESP32*/
+/*Pinos usados e variaveis LEDs e ESP32*/
 int pinVermelho = 25;
 int pinAmarelo = 27;
 int pinVerde = 26;
 int contador = 0;
 unsigned long delay1 = 0;
 unsigned long delay2 = 0;
+
+/*Função para mudar a velocidade do semaforo*/
 void tempoSemaforo (int verde, int amarelo, int vermelho);
 
-/*IBM Watson IoT Platform info*/
+/*IBM Watson IoT Platform informações*/
 #define ORG "9e8of7" 
 #define DEVICE_TYPE "ESP32-V1.0" 
 #define DEVICE_ID "Semaforo-Inteligente-V1.0" 
 #define TOKEN "n+bOVh?*95HUfc?&7!"
 
-/*Define sound speed in cm/uS*/
+/*Velocidade do som em cm/uS*/
 #define SOUND_SPEED 0.034
 #define CM_TO_INCH 0.393701
 
-/*Variables HCSR04*/
+/*Variaveis HCSR04*/
 long duration;
 float distanceCm;
 float distanceInch;
 
-/*Wifi Info*/
+/*Wifi login*/
 const char* ssid = "MORAIS_2G";
 const char* password = "@25070400#";
 
-/*IBM Watson IoT Platform connection*/
+/*IBM Watson IoT Platform conexão*/
 char server[] = ORG ".messaging.internetofthings.ibmcloud.com";
 char pubTopic1[] = "iot-2/evt/teste1/fmt/json";
 char pubTopic2[] = "iot-2/evt/status2/fmt/json";
@@ -55,7 +57,7 @@ WiFiClient wifiClient;
 PubSubClient client(server, 1883, NULL, wifiClient);
 
 void setup() {
-  /*Wifi Connection ESP32*/
+  /*Wifi Connection ESP32 (61-74)*/
   Serial.begin(115200);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
@@ -74,7 +76,7 @@ void setup() {
   pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
   pinMode(echoPin, INPUT); // Sets the echoPin as an Input
 
-  pinMode(pinVerde, OUTPUT);
+  pinMode(pinVerde, OUTPUT); //Pinos de LED como Output
   pinMode(pinAmarelo, OUTPUT);
   pinMode(pinVermelho, OUTPUT);
 }
@@ -82,19 +84,19 @@ void setup() {
 long lastMsg = 0;
 
 void loop(){
-  // Clears the trigPin
+  //Limpo o trigPin
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   
-  // Sets the trigPin on HIGH state for 10 micro seconds
+  //Sets the trigPin on HIGH state for 10 micro seconds
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
 
-  // Reads the echoPin, returns the sound wave travel time in microseconds
+  //Reads the echoPin, returns the sound wave travel time in microseconds
   duration = pulseIn(echoPin, HIGH);
   
-  // Calculate the distance
+  //Calcula a distância
   distanceCm = duration * SOUND_SPEED/2;
 
   //Calculando contador
@@ -105,7 +107,7 @@ void loop(){
   
   Serial.println(contador);
   
-  //Calculando o tempo do semáforo
+  //Calculando o tipo de fluxo do semáforo
   if (contador < 2){
     tempoSemaforo(5000, 2000, 5000);
   }
@@ -116,14 +118,16 @@ void loop(){
     tempoSemaforo (7000, 2000, 3000);
   }
 
-    if ((millis() - delay2) >= 12000){
+  //Zerando o contador quando acaba um ciclo do semaforo
+  if ((millis() - delay2) >= 12000){
     contador = 0;
     delay2 = millis();
   }
 
   client.loop();
   long now = millis();
-  
+
+  //Enviando as informações para a plataforma IBM (131-158)
   if (now - lastMsg > 1000){
     lastMsg = now;
     float distancia = distanceCm;
@@ -154,6 +158,7 @@ void loop(){
   }
 }
 
+//Função que define o tipo de fluxo do semáforo
 void tempoSemaforo (int verde, int amarelo, int vermelho) {
   if ((millis() - delay1) <= verde){
     digitalWrite(pinVerde, HIGH);
